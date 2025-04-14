@@ -90,7 +90,10 @@ void	putopsizepref(void)
 {
 	int i;
 	putaddrsizepref();
-	for(i=0;i<parnum&&par[i][0];i++)if(testopsize(i)){acode[alen++]=0x66;break;}//cputype(3);
+	for(i=0;i<parnum && par[i] && par[i][0];i++)
+            if(testopsize(i)){
+                acode[alen++]=0x66;
+                break;}//cputype(3);
 }
 void	xchgpar(int p1,int p2)
 {char *ct;struct inforec bt1;
