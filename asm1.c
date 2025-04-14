@@ -119,6 +119,16 @@ asm jnc L1
 	L1E:
 	return(count-1);
 }
+#elif __GNUC__
+int     dobsf(int i)
+{
+   int result;
+   asm ("bsfl %1,%0"
+     : "=r" (result)
+     : "r" (i)
+     : "cc");
+   return result;
+}
 #else
 #if defined(__SW_3)||defined(__SW_4)||defined(__SW_5)
 #pragma aux dobsf="mov cx,-1""bsf cx,ax" parm[ax] value[cx];
