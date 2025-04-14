@@ -17,7 +17,7 @@
 
 typedef struct inforec {unsigned size:4,typ:5,opsize:1,addrsize:1,segregpref:3,info:3,index:3,basis:3,shift:2;long data;unsigned segdata;} inforec;
 
-char	*rem,*par[parnum],acode[16],segregstr[segregnum]={'e','c','s','d','f','g'}
+unsigned char	*rem,*par[parnum],acode[16],segregstr[segregnum]={'e','c','s','d','f','g'}
 	,rcode[4]={0xe,0x6a,0,0xcb},str[32]="";
 int	opnum2,alen,use32=0,addr32,cpu=0,needcpu;
 struct	inforec b1[parnum];
