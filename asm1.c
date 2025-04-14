@@ -102,7 +102,7 @@ void	shiftpar(void)
 	par[parnum-1]=NULL;
 	memset(&b1[parnum-1],0,sizeof(b1[0]));
 }
-	isshort(long p1)
+int	isshort(long p1)
 {return(p1>=-128&&p1<128);}
 
 #ifdef __TURBOC__

@@ -22,14 +22,14 @@ int strproc(int base)
 	acode[alen++]=base+(*rem!='b')+(opnum2<<1);
 	return(0);
 }
-prstr()
+int prstr()
 {return(strproc(0xaa));}
-prstr2()
+int prstr2()
 {opnum2++;return(strproc(0xa4));}
-prstr3(void)
+int prstr3()
 {cputype(2);return(strproc(0x6a));}
 
-prmov()
+int prmov()
 {
 	int rev;
 	if(*rem=='s'&&*(rem+1)!='x'){rem++;return(strproc(0xa4));}
@@ -83,7 +83,7 @@ prmov()
 	return(0);
 }
 
-prxchg()
+int prxchg()
 {
 	putopsizepref();
 	if(!(b1[0].size&b1[1].size))return(37);
@@ -102,7 +102,7 @@ prxchg()
 	}
 }
 
-princdec()
+int princdec()
 {
 	putopsizepref();
 	if(b1[0].typ==tsimplereg&&!(b1[0].size&1))acode[alen++]=0x40|(opnum2<<3)|b1[0].info;
@@ -111,7 +111,7 @@ princdec()
 	return(0);
 }
 
-prmath()
+int prmath()
 {
 	int xchg=0,sh;
 	putopsizepref();
@@ -138,7 +138,7 @@ prmath()
 	return(0);
 }
 
-prtest()
+int prtest()
 {
 	putopsizepref();
 	if(b1[1].typ<=tsimplereg&&b1[0].typ!=tsimplereg)xchgpar(0,1);
@@ -153,7 +153,7 @@ prtest()
 	return(0);
 }
 
-prsingle()
+int prsingle()
 {
 	putopsizepref();
 	if(opnum2==3)
@@ -169,7 +169,7 @@ prsingle()
 	return(0);
 }
 
-prshft()
+int prshft()
 {
 	int isr,op,im;
 	putopsizepref();
@@ -201,7 +201,7 @@ prshft()
 	return(0);
 }
 
-praa()
+int praa()
 {
 	switch(*rem)
 	{
@@ -213,7 +213,7 @@ praa()
 	return(0);
 }
 
-prbt()
+int prbt()
 {
 	int x=0;
 	switch(*rem)
@@ -235,7 +235,7 @@ prbt()
 	return(0);
 }
 
-prbs()
+int prbs()
 {
 	putopsizepref();
 	if(*(rem+1))return(91);
@@ -248,7 +248,7 @@ prbs()
 	return(0);
 }
 
-prxchgop()
+int prxchgop()
 {
 	cputype(4);
 	putopsizepref();
@@ -256,7 +256,7 @@ prxchgop()
 	return(0);
 }
 
-prbswap()
+int prbswap()
 {
 	if(b1[0].size&1)return(90);
 	if(b1[0].typ!=tsimplereg)return(38);
@@ -267,7 +267,7 @@ prbswap()
   return(0);
 }
 
-prenter()
+int prenter()
 {
 	cputype(2);
 	acode[alen++]=0xc8;
@@ -276,7 +276,7 @@ prenter()
 	return(0);
 }
 
-prpushpop(void)
+int prpushpop(void)
 {
 	putaddrsize(0);
 	//putaddrsizepref();
@@ -304,7 +304,7 @@ prpushpop(void)
 	return(0);
 }
 
-prjmp()
+int prjmp()
 {
 	if(b1[0].typ==tsimplereg)putopsizepref();
 	 else putaddrsizepref();
@@ -318,7 +318,7 @@ prjmp()
 	return(0);
 }
 
-prjcxz()
+int prjcxz()
 {
 	if(opnum2^use32){cputype(3);acode[alen++]=0x67;}
 //if(!isshort(b1[0].data))return(90);
@@ -326,7 +326,7 @@ prjcxz()
 	appendimdata(0,1);
 	return(0);
 }
-prloop()
+int prloop()
 {
 	int val=0xe2;
 	if(*rem=='n'){val--;rem++;}
@@ -337,7 +337,7 @@ prloop()
 	return(0);
 }
 
-prclst()
+int prclst()
 {
 	int val=0xf8;
 	switch(*rem)
@@ -351,14 +351,14 @@ prclst()
 	return(0);
 }
 
-prcwd()
+int prcwd()
 {
 	if((opnum2<2)^use32){cputype(3);acode[alen++]=0x66;}
 	acode[alen++]=0x98|(opnum2&1);
 	return(0);
 }
 
-print()
+int print()
 {
 	int val=0xcd;
 	if(*rem=='o')val++;
@@ -370,7 +370,7 @@ print()
 	return(0);
 }
 
-prret()
+int prret()
 {
 	int ad=(*rem=='f')<<3;
 	if(b1[0].typ==tconstant)
@@ -381,7 +381,7 @@ prret()
 	return(0);
 }
 
-prseg()
+int prseg()
 {
 	int i;
 	for(i=0;i<segregnum;i++)if(*rem==segregstr[i])break;
@@ -391,13 +391,13 @@ prseg()
 	return(prefix());
 }
 
-prrep()
+int prrep()
 {
 	acode[alen++]=0xf2+(!*rem||*rem=='e'||*rem=='z');
 	return(prefix());
 }
 
-prinout()
+int prinout()
 {
 	int ad;
 	if(*rem=='s'){rem++;return(prstr3());}
@@ -418,21 +418,21 @@ prinout()
 	return(0);
 }
 
-prlea()
+int prlea()
 {
 	//if(!(b1[0].size&b1[1].size))return(37);
 	putopsizepref();
 	acode[alen++]=0x8d;putfullrm(b1[0].info,1);
 	return(0);
 }
-prles()
+int prles()
 {
 	putaddrsizepref();
 	if(testopsize(0))acode[alen++]=0x66;
 	putrmop(b1[0].info,1,0xc4+opnum2);
 	return(0);
 }
-prlxs()
+int prlxs()
 {
 	cputype(3);
 	putaddrsizepref();
@@ -447,14 +447,14 @@ char condi[36][4]={
 	"" ,""  ,"nae","ae","z","nz","na","a"  ,"" ,""  ,"pe","po","nge","ge","ng","g",
 	"" ,""  ,"c"  ,"nc"};
 
-getcondinum(void)
+int getcondinum(void)
 {
 	int i;
 	for(i=0;i<36;i++) if(condi[i][0]&&!strncmp(condi[i],rem,strlen(condi[i]))) return(i&15);
 	return(-1);
 }
 
-prj()
+int prj()
 {
 	int i;
 	if((i=getcondinum())==-1)return(91);
@@ -463,7 +463,7 @@ prj()
 	return(0);
 }
 
-prset()
+int prset()
 {
 	int i;
 	cputype(3);
@@ -474,14 +474,14 @@ prset()
 	return(0);
 }
 
-prcpuid()
+int prcpuid()
 {
 	cputype(5);
 	acode[alen++]=0xf;
 	acode[alen++]=0xa2;
 	return(0);
 }
-premms()
+int premms()
 {
 	cputype(6);
 	acode[alen++]=0xf;
@@ -489,7 +489,7 @@ premms()
 	return(0);
 }
 
-MMadd(){
+int MMadd(){
 	int sz=(b1[0].size==0xf?b1[1].size:b1[0].size),optyp=0;
 	if (*rem=='s') {optyp=0x10;rem++;}
 	if (*rem=='u') {optyp=0x20;rem++;//&&*(rem)=='s'
@@ -506,7 +506,7 @@ MMadd(){
 	putrmxop(b1[0].info,1,0xfc-(opnum2<<2)+dobsf(sz)-optyp);
 	return(0);
 }
-MMunpck()
+int MMunpck()
 {
 	int sz=(b1[0].size==0xf?b1[1].size:b1[0].size/2),optyp;
 	if (*rem=='l') optyp=0;
@@ -524,7 +524,7 @@ MMunpck()
 	putrmxop(b1[0].info,1,0xa0+dobsf(sz)-optyp);
 	return(0);
 }
-MMshift()
+int MMshift()
 {
 	int sz=(b1[0].size==0xf?b1[1].size:b1[0].size);
 	opnum2++;
@@ -543,7 +543,7 @@ MMshift()
 	else return(38);
 	return(0);
 }
-prcmpMM()
+int prcmpMM()
 {
 	int sz=(b1[0].size==0xf?b1[1].size:b1[0].size);
 	if (*rem=='d') sz=4;
@@ -566,7 +566,7 @@ MMmadd()
 #define oneMMopnum 10
 char oneMMop[oneMMopnum]={0xdf,0xdb,0xf5,0xeb,0xef,0xe5,0xd5,
 						0x63,0x67,0x6b};
-proneMM(){
+int proneMM(){
   if (b1[1].typ>=tmem2 && b1[1].typ!=tMMXreg) return(38);
   putaddrsizepref();
   putrmxop(b1[0].info,1,oneMMop[opnum2]);
@@ -586,7 +586,7 @@ int		(*MMopproc[MMmaxopcode])(void)={MMadd,MMadd,MMunpck,
 			proneMM,proneMM,proneMM,
 			prcmpMM,prcmpMM};
 
-prp()
+int prp()
 {
 	int j,MMopnum;
 	cputype(6);
@@ -608,7 +608,7 @@ prp()
 char oneop[oneopnum]={
 		0xf5,0x9e,0x9f,0xcf,0xc9,0x90,
 		0x27,0x2f,0x37,0x3f,0xf0};
-prone(){acode[alen++]=oneop[opnum2];return(0);}
+int prone(){acode[alen++]=oneop[opnum2];return(0);}
 
 char	opcode[maxopcode][8]={
 		"push","pop","p",
@@ -665,7 +665,7 @@ int execproc(char *line)
 	return(91);
 }
 
-prefix()
+int prefix(void)
 {
 	char *p=par[0];
 	shiftpar();

@@ -1,6 +1,7 @@
+#include "helper.c"
 #include "asmpr.c"
 
-main(int argc,char *argp[])
+int main(int argc,char *argp[])
 {
 	char line[128],*p;
 	int	i,j,err;
